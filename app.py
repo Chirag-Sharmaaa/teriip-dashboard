@@ -307,7 +307,7 @@ table_df.index = table_df.index + 1  # start from 1
 styled = (
     table_df
     .style
-    .applymap(colour_completion, subset=["Completion_%"])
+    .map(colour_completion, subset=["Completion_%"])
     .format({"Completion_%": "{:.1f}%"})
     .set_properties(**{"background-color": "#111827", "color": "#c8d4e4", "border": "1px solid #1f2d40"})
     .set_table_styles(
@@ -519,7 +519,7 @@ else:
 
         st.dataframe(
             stats.style
-            .applymap(_colour_skew, subset=["skewness"])
+            .map(_colour_skew, subset=["skewness"])
             .set_properties(subset=["skew_label"], **{"color": "#94a3b8", "font-style": "italic"})
             .format({c: "{:.3f}" for c in stats.columns if c not in ["Parameter", "count", "skew_label"]})
             .format({"count": "{:.0f}"})
