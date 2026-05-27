@@ -235,9 +235,8 @@ fig_map.add_trace(
             colorscale=colorscale,
             cmin=0, cmax=100,
             colorbar=dict(
-                title="Completion %",
+                title=dict(text="Completion %", font=dict(color="#b0bcd0")),
                 tickfont=dict(color="#b0bcd0"),
-                titlefont=dict(color="#b0bcd0"),
                 bgcolor="rgba(0,0,0,0)",
                 bordercolor="#2a3045",
             ),
