@@ -136,8 +136,12 @@ def load_master() -> pd.DataFrame:
     master["Age_Group"] = pd.cut(
         master["Age"], bins=AGE_BINS, labels=AGE_LABELS, right=True
     )
-    master["Gender"] = master["Gender"].astype(str).str.strip().str.title()
-    master["Gender"] = master["Gender"].replace({"Nan": "Unknown", "": "Unknown"})
+    master["Gender"] = master["Gender"].astype(str).str.strip().str.upper()
+    master["Gender"] = master["Gender"].replace({
+    "M": "Male", "F": "Female",
+    "MALE": "Male", "FEMALE": "Female",
+    "NAN": "Unknown", "": "Unknown", "UNKNOWN": "Unknown"
+    })
 
     # Attach region from metadata
     master["Region"] = master["Centre"].map(
