@@ -350,22 +350,22 @@ drill_stage = st.selectbox(
     # Keys must match the Centre_Key column in centre_summary.
 CENTRE_FUNNEL_DATA = {
         # "Centre_Key":  [Screened, Eligible, Collected]
-        "AIIMS_Jodhpur":       [220, 200, 185],
-        "AIIMS_Bhatinda":      [210, 195, 180],
-        "AIIMS_Bhopal":        [200, 185, 170],
-        "AIIMS_Raipur":        [190, 175, 160],
-        "Amrita_Kochi":        [215, 200, 190],
-        "Gleneagles_Chennai":  [180, 165, 150],
-        "JSS_Mysore":          [205, 190, 178],
-        "KIMS_Bhubaneswar":    [200, 185, 172],
-        "KMC_Manipal":         [210, 195, 183],
-        "PD_Hinduja_Mumbai":   [220, 205, 192],
-        "AIIMS_Delhi":         [0, 0, 0],
-        "AIIMS_Kalyani":       [0, 0, 0],
-        "AIIMS_Guwahati":      [0, 0, 0],
-        "DrBBCI_Guwahati":     [0, 0, 0],
-        "KGMU_Lucknow":        [0, 0, 0],
-        "PGIMER_Chandigarh":   [0, 0, 0],
+        "AIIMS_Jodhpur":       [520, 250, 154],
+        "AIIMS_Bhatinda":      [338, 151, 27],
+        "AIIMS_Bhopal":        [361, 37, 17],
+        "AIIMS_Raipur":        [251, 174, 77],
+        "Amrita_Kochi":        [250, 140, 51],
+        "Gleneagles_Chennai":  [295, 82, 16],
+        "JSS_Mysore":          [467, 217, 68],
+        "KIMS_Bhubaneswar":    [764, 86, 18],
+        "KMC_Manipal":         [419, 177, 81],
+        "PD_Hinduja_Mumbai":   [340, 93, 15],
+        "AIIMS_Delhi":         [228, 95, 0],
+        "AIIMS_Kalyani":       [1200, 50, 39],
+        "AIIMS_Guwahati":      [638, 286, 0],
+        "DrBBCI_Guwahati":     [180, 22, 0],
+        "KGMU_Lucknow":        [85, 39, 0],
+        "PGIMER_Chandigarh":   [22, 4, 0],
     }
 
 stage_idx = {"Patients Screened": 0, "Eligible": 1, "Samples Collected": 2}
