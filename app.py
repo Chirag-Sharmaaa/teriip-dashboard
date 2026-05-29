@@ -471,7 +471,43 @@ sel_group = st.selectbox(
 )
 
 group_params = [p for p in PARAM_GROUPS[sel_group] if p in STANDARD_PARAMS]
-group_df     = master[["Centre", "Display_Name", "Region", "Gender"] + group_params].copy()
+group_df = master[["Centre", "Display_Name", "Region", "Gender"] + group_params].copy()
+
+# Filter out physiologically impossible values for visualisation only
+PLAUSIBLE_LIMITS = {
+    "Hb": (3, 22), "PCV": (10, 65), "TRBC": (1.5, 8.0),
+    "MCV": (50, 130), "MCH": (10, 50), "MCHC": (20, 45), "RDW": (5, 35),
+    "TLC": (500, 80000), "Neutrophil": (1, 99), "Lymphocyte": (1, 99),
+    "Monocyte": (0, 30), "Eosinophil": (0, 60), "Basophil": (0, 10),
+    "Platelet_Count": (5000, 1500000), "MPV": (4, 20),
+    "Abs_Neutrophil": (100, 50000), "Abs_Basophil": (0, 500),
+    "Abs_Eosinophil": (0, 5000), "Abs_Lymphocyte": (200, 20000),
+    "Abs_Monocyte": (0, 5000), "Reticulocyte_Count": (0.1, 10),
+    "Total_Bilirubin": (0.1, 30), "Direct_Bilirubin": (0.01, 20),
+    "Indirect_Bilirubin": (0.01, 20), "ALT": (2, 2000), "AST": (2, 2000),
+    "ALP": (10, 2000), "Total_Protein": (3, 12), "Albumin": (1, 7), "GGT": (2, 1000),
+    "Urea": (5, 300), "Creatinine": (0.2, 20), "Uric_Acid": (1, 20),
+    "Sodium": (110, 170), "Potassium": (1.5, 9), "Chloride": (70, 130),
+    "Glucose": (30, 600), "HbA1c": (2, 20), "Total_Cholesterol": (50, 600),
+    "LDL_Cholesterol": (20, 500), "HDL_Cholesterol": (10, 150), "Triglyceride": (20, 2000),
+    "TSH": (0.001, 200), "Total_T3": (0.1, 10), "Free_T3": (0.5, 30),
+    "Total_T4": (1, 30), "Free_T4": (0.1, 10),
+    "Thyroglobulin_Ab": (0, 5000), "TPO": (0, 5000),
+    "Amylase": (5, 2000), "Lipase": (5, 3000),
+    "Calcium": (4, 16), "Phosphorus": (0.5, 12), "Iron": (5, 500),
+    "Ferritin": (1, 10000), "Transferrin_Saturation": (1, 100), "TIBC": (100, 700),
+    "Vitamin_B12": (10, 5000), "Folate": (0.5, 100), "Vitamin_D": (2, 300),
+    "Copper": (20, 400), "Magnesium": (0.5, 5), "Zinc": (20, 300),
+    "CRP": (0, 300), "ESR": (0, 200),
+}
+
+plot_master = master.copy()
+for _p in group_params:
+    if _p in PLAUSIBLE_LIMITS:
+        _lo, _hi = PLAUSIBLE_LIMITS[_p]
+        plot_master[_p] = plot_master[_p].where(
+            plot_master[_p].between(_lo, _hi, inclusive="both"), other=np.nan
+        )
 SKIP_NUMERIC = ["Blood_Group", "PBS"]
 available_params = [p for p in group_params if group_df[p].notna().any() and p not in SKIP_NUMERIC]
 
@@ -549,7 +585,7 @@ else:
         for chunk in chunks:
             cols = st.columns(n_cols)
             for col_idx, param in enumerate(chunk):
-                vals = master[param].dropna()
+                vals = plot_master[param].dropna()
                 if len(vals) == 0:
                     continue
 
@@ -607,7 +643,7 @@ else:
             "Lets you compare whether parameter values differ systematically across regions."
         )
         for param in available_params:
-            plot_df = master[["Region", param]].dropna(subset=[param])
+            plot_df = plot_master[["Region", param]].dropna(subset=[param])
             if plot_df.empty:
                 continue
             fig_box = px.box(
@@ -640,7 +676,7 @@ else:
         valid_genders = [g for g in valid_genders if g not in ["Unknown", "nan"]]
 
         for param in available_params:
-            plot_df = master[master["Gender"].isin(valid_genders)][["Gender", param]].dropna(subset=[param])
+            plot_df = plot_master[plot_master["Gender"].isin(valid_genders)][["Gender", param]].dropna(subset=[param])
             if plot_df.empty:
                 continue
             fig_sex = px.box(
